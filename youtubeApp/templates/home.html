@@ -9,6 +9,24 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="{% get_static_prefix %}css/home-styles.css">
+        <style>
+            #user-options > div{
+                padding: 10px;
+            }
+            #user-options {
+                position:absolute;
+                width: 150px;
+                background-color: #f1f1f1;
+                top: 0;
+                right: 15%;
+                animation-name: user-options-animation;
+                animation-duration: 0.5s;
+            }
+            @keyframes user-options-animation {
+                from { top: -30%;}
+                to { top: 0%;}
+            }
+        </style>
     </head>
     <body>
         <div class="container">
@@ -33,6 +51,12 @@
                     </div>
                 {%endif%}
             </header>
+        </div>
+        <div id="user-options" style="display: none;">
+            <div><a href="#">Change Profile</a></div>
+            <div><a href="#">Your Videos</a></div>
+            <div><a href="#">PlayLists</a></div>
+            <div><a href="#">Logout</a></div>
         </div>
         <script src="{%get_static_prefix%}/js/home.js"></script>
     </body>

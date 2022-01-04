@@ -2,9 +2,16 @@ from django.shortcuts import redirect, render
 from youtubeApp.forms import signUpForm,signInForm
 from youtubeApp.models import User
 from django.contrib.auth.hashers import make_password,check_password
+from django.views.decorators.cache import cache_control
 
 # Create your views here.
 
+# def authenticate(func):
+#     def inner(request):
+#         pass
+#     return inner
+
+# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def home_page(request):
     username = request.session.get('username',None)
     if(username):
@@ -44,3 +51,6 @@ def signin(request):
         form = signInForm()
     return render(request,'signin.html',{"form":form,"error_message":error_message})
 
+def logout(request):
+    request.session.pop("username",None)
+    return redirect("/youtubeApp/")

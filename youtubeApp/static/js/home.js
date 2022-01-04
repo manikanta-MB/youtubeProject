@@ -6,4 +6,7 @@ document.getElementById("profile").addEventListener("click",function(event){
     else{
         ele.style.display = "block";
     }
-})
+});
+document.querySelector('.upload-video span').addEventListener("click",function(){
+    window.location = "/youtubeApp/upload_video/"
+});

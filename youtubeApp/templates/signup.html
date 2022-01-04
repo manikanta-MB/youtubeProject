@@ -6,6 +6,16 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+            input[type=submit] {
+                background-color: green;
+                color: white;
+                font-weight: bold;
+            }
+            .jumbotron {
+                margin-top: 20px;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
@@ -15,7 +25,7 @@
                     <form method="post" enctype="multipart/form-data" action="">
                         {{form.as_p}}
                         {%csrf_token%}
-                        <input style="background-color:green;color:white;" type="submit" class="form-control" value="signUp">
+                        <input type="submit" class="form-control" value="signUp">
                     </form>
                 </div>
             </div>

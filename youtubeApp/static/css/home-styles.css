@@ -32,7 +32,7 @@ header {
     cursor: pointer;
 }
 
-.search, .sign-in, .profile-image {
+.search, .sign-in, .profile-section {
     padding-top: 10px;
 }
   
@@ -54,10 +54,10 @@ header {
 .sign-in {
     text-align: right;
 }
-.sign-in button:hover, .profile-image img:hover{
+.sign-in button:hover, #profile , .upload-video span{
     cursor: pointer;
 }
 
-.profile-image {
-    text-align: right;
+.upload-video {
+    margin-right: 20px;
 }

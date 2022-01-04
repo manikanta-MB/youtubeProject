@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>SignIn Page</title>
+        <title>Video Upload Page</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -19,19 +19,13 @@
     <body>
         <div class="container">
             <div class="jumbotron">
-                <h1>SignIn Form</h1>
+                <h1>Upload Your Video Here...</h1>
                 <div class="form-group">
-                    <form method="post" action="">
+                    <form action="" method="post" enctype="multipart/form-data">
                         {{form.as_p}}
                         {%csrf_token%}
-                        <input type="submit" class="form-control" value="signIn">
+                        <input type="submit" class="form-control" value="Submit">
                     </form>
-                    <br>
-                    <a href="/youtubeApp/signup/">Don't you have Account?</a>
-                    <br>
-                    <div style="color: red;text-align: center;">
-                        {{error_message}}
-                    </div>
                 </div>
             </div>
         </div>

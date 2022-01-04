@@ -5,6 +5,8 @@
         <title>Home Page</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -39,12 +41,17 @@
                     <button type="button"><i class="fa fa-search"></i></button>
                 </div>
                 {%if user%}
-                    <div class="profile-image">
-                        <img id="profile" src="{{user.profile.url}}" alt="Profile Photo" class="img-circle" width="50" height="50">
+                    <div class="profile-section">
+                        {%if user.profile%}
+                            <div style="float:right"><img id="profile" src="{{user.profile.url}}" alt="Profile Photo" class="img-circle" width="50" height="50"></div>
+                        {%else%}
+                        <div style="float: right;"><i id="profile" class="fa fa-user-circle-o" style="font-size:36px"></i></div>
+                        {%endif%}
+                        <div class="upload-video" style="float: right;"><span class="material-icons" style="font-size:36px">video_call</span></div>
                     </div>
                 {%else%}
                     <div class="sign-in">
-                        <button onclick="window.location='/youtubeApp/signin/'">
+                        <button>
                             <i class='far fa-user-circle' style='font-size:16px;'></i>
                             SIGN IN
                         </button>
@@ -58,6 +65,11 @@
             <div><a href="#">PlayLists</a></div>
             <div><a href="/youtubeApp/logout/">Logout</a></div>
         </div>
+        <script>
+            document.querySelector('.sign-in > button').addEventListener("click",function(){
+                window.location = "/youtubeApp/signin/"
+            });
+        </script>
         <script src="{%get_static_prefix%}/js/home.js"></script>
     </body>
 </html>

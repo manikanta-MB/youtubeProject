@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from youtubeApp.forms import signUpForm,signInForm
+from youtubeApp.forms import SignUpForm,SignInForm, VideoUploadForm
 from youtubeApp.models import User
 from django.contrib.auth.hashers import make_password,check_password
 from django.views.decorators.cache import cache_control
@@ -22,20 +22,20 @@ def home_page(request):
 
 def signup(request):
     if(request.method == "POST"):
-        form = signUpForm(request.POST,request.FILES)
+        form = SignUpForm(request.POST,request.FILES)
         if(form.is_valid()):
             user = form.save(commit=False)
             user.password = make_password(user.password)
             user.save()
             return redirect('/youtubeApp/signin/')
     else:
-        form = signUpForm()
+        form = SignUpForm()
     return render(request,'signup.html',{"form":form})
 
 def signin(request):
     error_message = ""
     if(request.method == "POST"):
-        form = signInForm(request.POST)
+        form = SignInForm(request.POST)
         given_username = request.POST["username"]
         given_password = request.POST["password"]
         try:
@@ -48,9 +48,25 @@ def signin(request):
         finally:
             error_message = "invalid Username or Password"
     else:
-        form = signInForm()
+        form = SignInForm()
     return render(request,'signin.html',{"form":form,"error_message":error_message})
 
 def logout(request):
     request.session.pop("username",None)
     return redirect("/youtubeApp/")
+
+def upload_video(request):
+    if(request.method == "POST"):
+        # file_name = request.FILES["file"]
+        # form = VideoUploadForm(request.POST,request.FILES)
+        form = VideoUploadForm(request.POST,request.FILES)
+        if(form.is_valid()):
+            video = form.save(commit=False)
+            current_username = request.session.get("username")
+            current_user = User.objects.get(username=current_username)
+            video.user = current_user
+            video.save()
+            return redirect("/youtubeApp/")
+    else:
+        form = VideoUploadForm()
+    return render(request,"upload-video.html",{"form":form})

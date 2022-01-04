@@ -61,3 +61,7 @@ header {
 .upload-video {
     margin-right: 20px;
 }
+
+.video {
+    cursor: pointer;
+}

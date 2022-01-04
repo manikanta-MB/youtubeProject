@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from youtubeApp.forms import SignUpForm,SignInForm, VideoUploadForm
-from youtubeApp.models import User
+from youtubeApp.models import User, Video
 from django.contrib.auth.hashers import make_password,check_password
 from django.views.decorators.cache import cache_control
 
@@ -18,7 +18,8 @@ def home_page(request):
         user = User.objects.get(username=username)
     else:
         user = None
-    return render(request,'home.html',{"user":user})
+    videos = Video.objects.all()
+    return render(request,'home.html',{"user":user,"videos":videos})
 
 def signup(request):
     if(request.method == "POST"):
@@ -70,3 +71,7 @@ def upload_video(request):
     else:
         form = VideoUploadForm()
     return render(request,"upload-video.html",{"form":form})
+
+def play_video(request,id):
+    print(id)
+    return render(request,"play_video.html")

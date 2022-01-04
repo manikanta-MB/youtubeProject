@@ -28,6 +28,12 @@
                 from { top: -30%;}
                 to { top: 0%;}
             }
+            .videos-grid-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                grid-column-gap: 20px;
+                grid-row-gap: 20px;
+            }
         </style>
     </head>
     <body>
@@ -58,6 +64,17 @@
                     </div>
                 {%endif%}
             </header>
+            <div class="videos-grid-container">
+                {% for video in videos %}
+                    <div class="video" id="{{video.id}}">
+                        <video style="width:100%;height:170px;" >
+                            <source src="{{video.file.url}}">
+                        </video><br>
+                        <b>{{video.name}} by {{video.user.username}}</b><br>
+                        Created: {{video.uploaded_date}}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         <div id="user-options" style="display: none;">
             <div><a href="#">Change Profile</a></div>

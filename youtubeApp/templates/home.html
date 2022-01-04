@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{%load static%}
+<html>
+    <head>
+        <title>Home Page</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="{% get_static_prefix %}css/home-styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="brand-logo">
+                    <img src="{% get_static_prefix %}images/youtube_brand.jpg" alt="Youtube Brand Image">
+                </div>
+                <div class="search">
+                    <input type="text" placeholder="Search.." name="search">
+                    <button type="button"><i class="fa fa-search"></i></button>
+                </div>
+                {%if user%}
+                    <div class="profile-image">
+                        <img id="profile" src="{{user.profile.url}}" alt="Profile Photo" class="img-circle" width="50" height="50">
+                    </div>
+                {%else%}
+                    <div class="sign-in">
+                        <button onclick="window.location='/youtubeApp/signin/'">
+                            <i class='far fa-user-circle' style='font-size:16px;'></i>
+                            SIGN IN
+                        </button>
+                    </div>
+                {%endif%}
+            </header>
+        </div>
+        <script src="{%get_static_prefix%}/js/home.js"></script>
+    </body>
+</html>

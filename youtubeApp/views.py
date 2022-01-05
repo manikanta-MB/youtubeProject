@@ -73,5 +73,12 @@ def upload_video(request):
     return render(request,"upload-video.html",{"form":form})
 
 def play_video(request,id):
-    print(id)
-    return render(request,"play_video.html")
+    remaining_videos = Video.objects.exclude(id=id)
+    video_to_watch = Video.objects.get(id=id)
+    username = request.session.get('username',None)
+    if(username):
+        user = User.objects.get(username=username)
+    else:
+        user = None
+    context = {"user":user,"remaining_videos":remaining_videos,"video_to_watch":video_to_watch}
+    return render(request,"play-video.html",context)

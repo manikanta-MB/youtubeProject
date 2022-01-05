@@ -75,23 +75,33 @@
             </div>
             <div class="row">
                 <div class="col-md-8 sub-grid-container">
-                    <div class="video_to_watch">
+                    <div class="video-to-watch">
                         <video style="width:100%;height:auto;" controls autoplay>
                             <source src="{{video_to_watch.file.url}}">
                         </video><br>
                         <b>{{video_to_watch.name}}</b><br>
                         <div class="video-options-grid-container">
                             <div><small>{{video_to_watch.uploaded_date}}</small></div>
-                            <div class="like btn btn-link btn-lg">
-                                <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                            <div onclick = "like('{{user}}','{{video_to_watch.id}}')" class="like btn btn-link btn-lg">
+                                {%if is_like_existed%}
+                                    <span class="fa fa-thumbs-up" style="font-size:24px"></span>
+                                {%else%}
+                                    <span class="fa fa-thumbs-o-up" style="font-size:24px"></span>
+                                {%endif%}
+                                 Like
                             </div>
-                            <div class="dislike btn btn-link btn-lg">
-                                <span class="glyphicon glyphicon-thumbs-down"></span> Dislike
+                            <div onclick = "dislike('{{user}}','{{video_to_watch.id}}')" class="dislike btn btn-link btn-lg">
+                                {% if is_dislike_existed%}
+                                    <span class="fa fa-thumbs-down" style="font-size:24px"></span>
+                                {%else%}
+                                    <span class="fa fa-thumbs-o-down" style="font-size:24px"></span>
+                                {%endif%}
+                                 Dislike
                             </div>
                             <div class="share btn btn-link btn-lg">
                                 <span class="glyphicon glyphicon-share-alt"></span> Share
                             </div>
-                            <div style="position:relative;" class="save btn btn-link btn-lg">
+                            <div onclick = "save('{{user}}','{{video_to_watch.id}}')" style="position:relative;" class="save btn btn-link btn-lg">
                                 <span class="material-icons">playlist_add</span>&nbsp;
                                 <span style="position:absolute;top: 10px;">Save</span>
                             </div>

@@ -3,6 +3,7 @@ from . import validators
 
 # Create your models here.
 
+
 def get_profile_path(instance,filename):
     return "images/profiles/"+instance.username+".jpg"
 
@@ -30,3 +31,18 @@ class Video(models.Model):
     def __str__(self):
         return self.name + "by" + self.user.username
 
+class Like(models.Model):
+    video = models.ForeignKey(Video,on_delete=models.CASCADE,related_name="likes")
+    by_whom = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name="liked_videos")
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['video', 'by_whom'], name='unique_likes_per_video_per_user')
+        ]
+
+class DisLike(models.Model):
+    video = models.ForeignKey(Video,on_delete=models.CASCADE,related_name="dislikes")
+    by_whom = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name="disliked_videos")
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['video', 'by_whom'], name='unique_dislikes_per_video_per_user')
+        ]

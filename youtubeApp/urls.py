@@ -8,4 +8,6 @@ urlpatterns = [
     path('logout/',views.logout),
     path('upload_video/',views.upload_video),
     re_path('^play_video/(?P<id>\d+)/$',views.play_video),
+    path('like/',views.like),
+    path('dislike/',views.dislike),
 ]

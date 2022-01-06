@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import constraints
 from . import validators
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -45,4 +47,13 @@ class DisLike(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['video', 'by_whom'], name='unique_dislikes_per_video_per_user')
+        ]
+
+class PlayList(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="playlists")
+    name = models.CharField(max_length=60)
+    video_ids = ArrayField(models.IntegerField(),default=list,blank=True)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user','name'], name="unique_playlist_per_user")
         ]

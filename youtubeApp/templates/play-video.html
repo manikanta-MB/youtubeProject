@@ -23,11 +23,11 @@
                 right: 15%;
                 z-index: 2;
                 animation-name: user-options-animation;
-                animation-duration: 0.5s;
+                animation-duration: 0.3s;
             }
             @keyframes user-options-animation {
-                from { top: -30%;}
-                to { top: 0%;}
+                from { top: -100px;}
+                to { top: 0;}
             }
             .like, .dislike, .share, .save {
                 color: black;
@@ -35,6 +35,15 @@
             .like:hover, .dislike:hover, .share:hover, .save:hover {
                 color: black;
                 text-decoration: none;
+            }
+            #share-tooltip{
+                background-color: black;
+                color: white;
+                z-index: 1;
+                top: -10px;
+                border-radius: 5px;
+                padding: 0px 5px;
+                display: none;
             }
         </style>
     </head>
@@ -65,14 +74,14 @@
                         </button>
                     </div>
                 {%endif%}
+                <div id="user-options" style="display: none;">
+                    <div><a href="#">Change Profile</a></div>
+                    <div><a href="#">Your Videos</a></div>
+                    <div><a href="#">PlayLists</a></div>
+                    <div><a href="/youtubeApp/logout/">Logout</a></div>
+                </div>
             </header>
             <hr>
-            <div id="user-options" style="display: none;">
-                <div><a href="#">Change Profile</a></div>
-                <div><a href="#">Your Videos</a></div>
-                <div><a href="#">PlayLists</a></div>
-                <div><a href="/youtubeApp/logout/">Logout</a></div>
-            </div>
             <div class="row">
                 <div class="col-md-8 sub-grid-container">
                     <div class="video-to-watch">
@@ -98,7 +107,10 @@
                                 {%endif%}
                                  Dislike
                             </div>
-                            <div class="share btn btn-link btn-lg">
+                            <div style="position:relative;" onclick="generateUrl(event)" class="share btn btn-link btn-lg">
+                                <div style="position:absolute;" id="share-tooltip">
+                                    <small>Copied to Clipboard</small>
+                                </div>
                                 <span class="glyphicon glyphicon-share-alt"></span> Share
                             </div>
                             <div onclick = "save('{{user}}','{{video_to_watch.id}}')" style="position:relative;" class="save btn btn-link btn-lg">

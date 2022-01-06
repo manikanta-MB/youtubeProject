@@ -101,3 +101,11 @@ function dislike(user,videoId){
     }
 }
 
+function generateUrl(){
+    navigator.clipboard.writeText(window.location.href);
+    let ele = document.getElementById("share-tooltip");
+    ele.style.display = "block";
+    setTimeout(function(){
+        ele.style.display = "none";
+    },2000);
+}

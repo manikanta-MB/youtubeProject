@@ -36,7 +36,7 @@
                 color: black;
                 text-decoration: none;
             }
-            #share-tooltip{
+            #share-tooltip {
                 background-color: black;
                 color: white;
                 z-index: 1;
@@ -45,9 +45,12 @@
                 padding: 0px 5px;
                 display: none;
             }
+            #create-playlist-btn span:hover {
+                cursor: pointer;
+            }
         </style>
     </head>
-    <body>
+    <body id="{{user}}">
         <div class="container">
             <header>
                 <div class="brand-logo">
@@ -84,7 +87,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-8 sub-grid-container">
-                    <div class="video-to-watch">
+                    <div id="{{video_to_watch.id}}" class="video-to-watch">
                         <video style="width:100%;height:auto;" controls autoplay>
                             <source src="{{video_to_watch.file.url}}">
                         </video><br>
@@ -113,7 +116,7 @@
                                 </div>
                                 <span class="glyphicon glyphicon-share-alt"></span> Share
                             </div>
-                            <div onclick = "save('{{user}}','{{video_to_watch.id}}')" style="position:relative;" class="save btn btn-link btn-lg">
+                            <div onclick = "saveVideo(event,'{{user}}','{{video_to_watch.id}}')" data-toggle="modal" data-target="#myModal"  style="position:relative;" class="save btn btn-link btn-lg">
                                 <span class="material-icons">playlist_add</span>&nbsp;
                                 <span style="position:absolute;top: 10px;">Save</span>
                             </div>
@@ -163,6 +166,33 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Save to... </h4>
+                    </div>
+                    <div class="modal-body" style="font-size: 16px;">
+                        
+                    </div>
+                    <div style="text-align:left;" class="modal-footer">
+                        <div onclick="showPlayListForm()" id="create-playlist-btn" style="position: relative;">
+                            <span class="material-icons">add</span>
+                            <span style="position:absolute;top: 0px;">Create new playlist</span>
+                        </div>
+                        <div style="display: none;" class="playlist-form">
+                            <input type="text" placeholder="PlayList Name ..." class="form-control">
+                            <br>
+                            <div onclick="addPlayList()" class="btn btn-primary">Create</div>
+                            <div id="playlist-error" style="color: red;display: none;">PlayList Already existed</div>
+                        </div>
+                        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
         <script>
             document.querySelector('.sign-in > button').addEventListener("click",function(){
                 window.location = "/youtubeApp/signin/"
@@ -171,3 +201,4 @@
         <script src="{%get_static_prefix%}/js/play-video.js"></script>
     </body>
 </html>
+<!-- onclick = "saveVideo('{{user}}','{{video_to_watch.id}}')" -->

@@ -1,9 +1,10 @@
 from django.shortcuts import redirect, render
 from youtubeApp.forms import SignUpForm,SignInForm, VideoUploadForm
-from youtubeApp.models import DisLike, Like, User, Video
+from youtubeApp.models import DisLike, Like, PlayList, User, Video
 from django.contrib.auth.hashers import make_password,check_password
 from django.views.decorators.cache import cache_control
 from django.http.response import JsonResponse
+from django.core.exceptions import PermissionDenied
 import json
 
 # Create your views here.
@@ -84,12 +85,14 @@ def play_video(request,id):
         user = None
     is_like_existed = Like.objects.filter(video=video_to_watch,by_whom=user).exists()
     is_dislike_existed = DisLike.objects.filter(video=video_to_watch,by_whom=user).exists()
+    # playlists = PlayList.objects.filter(user=user)
     context = {
         "user":user,
         "remaining_videos":remaining_videos,
         "video_to_watch":video_to_watch,
         "is_like_existed":is_like_existed,
-        "is_dislike_existed":is_dislike_existed
+        "is_dislike_existed":is_dislike_existed,
+        # "playlists":playlists
     }
     return render(request,"play-video.html",context)
 
@@ -123,3 +126,51 @@ def dislike(request):
         DisLike.objects.create(video=video,by_whom=user)
         created = True
     return JsonResponse({"created":created})
+def get_playlists(request):
+    data = json.loads(request.body)
+    username = data["username"]
+    video_id = int(data["videoId"])
+    playlists_objs = PlayList.objects.filter(user__username=username)
+    playlists = []
+    for playlist_obj in playlists_objs:
+        if(video_id in playlist_obj.video_ids):
+            checked=True
+        else:
+            checked=False
+        playlists.append({
+            "id":playlist_obj.id,
+            "name":playlist_obj.name,
+            "checked":checked
+        })
+    result = {"data":playlists}
+    return JsonResponse(result)
+
+def add_to_playlist(request):
+    data = json.loads(request.body)
+    username = data["username"]
+    if(request.session.get("username",None)==username):
+        checked = data["checked"]
+        video_id = data["videoId"]
+        play_list_id = data["playListId"]
+        playlist = PlayList.objects.get(id=play_list_id)
+        if(checked):
+            print("checked")
+            playlist.video_ids.append(int(video_id))
+        else:
+            playlist.video_ids.remove(int(video_id))
+        playlist.save()
+        return JsonResponse({"success":True})
+    else:
+        raise PermissionDenied()
+
+def create_new_playlist(request):
+    data = json.loads(request.body)
+    username = data["username"]
+    user = User.objects.get(username=username)
+    play_list_name = data["playListName"]
+    existed = PlayList.objects.filter(user=user,name=play_list_name).exists()
+    if(existed):
+        return JsonResponse({"existed":True})
+    else:
+        playlist = PlayList.objects.create(user=user,name=play_list_name)
+        return JsonResponse({"success":True,"playListId":playlist.id})

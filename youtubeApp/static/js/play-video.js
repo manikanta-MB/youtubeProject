@@ -109,3 +109,135 @@ function generateUrl(){
         ele.style.display = "none";
     },2000);
 }
+
+function saveVideo(event,user,videoId){
+    event.preventDefault();
+    if(user == "None"){
+        alert("Sign In");
+        document.getElementsByClassName("modal")[0].removeAttribute("id");
+    }
+    else{
+        let csrftoken = getCookie('csrftoken');
+        let data = {
+            "username":document.body.id,
+            "videoId":videoId
+        }
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrftoken
+            },
+            mode: 'same-origin',
+            body: JSON.stringify(data)
+        }
+        fetch("/youtubeApp/get_playlists/",options)
+        .then(response => response.json())
+        .then(info => {
+            let playlists = info["data"];
+            let modalBodyElement = document.querySelector("#myModal .modal-body");
+            modalBodyElement.innerHTML = '';
+            for(let playlist of playlists){
+                let divElement = document.createElement("div");
+                divElement.setAttribute("class","checkbox");
+                let labelElement = document.createElement("label");
+                let inputElement = document.createElement("input");
+                inputElement.setAttribute("type","checkbox");
+                inputElement.setAttribute("value",playlist["id"]);
+                if(playlist["checked"]){
+                    inputElement.setAttribute("checked",true);
+                }
+                let textNode = document.createTextNode(playlist["name"]);
+                labelElement.appendChild(inputElement);
+                labelElement.appendChild(textNode);
+                divElement.appendChild(labelElement);
+                modalBodyElement.appendChild(divElement);
+            }
+            addCheckboxListeners();
+        });
+    }
+}
+function addClickListener(event){
+    let username = document.body.id;
+    let videoId = document.getElementsByClassName("video-to-watch")[0].id;
+    let playListId = this.value;
+    let csrftoken = getCookie('csrftoken');
+    let checked = this.checked;
+    let data = {
+        "username": username,
+        "videoId": videoId,
+        "playListId":playListId,
+        "checked":checked
+    }
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken
+        },
+        mode: 'same-origin',
+        body: JSON.stringify(data)
+    }
+    fetch("/youtubeApp/add_to_playlist/",options)
+    .then(response => response.json())
+    .then(info => {
+        if(info.success){
+            console.log("Modified.");
+        }
+    })
+    .catch(err => alert("Permission Denied."));
+}
+function addCheckboxListeners(){
+    document.querySelectorAll('.checkbox input[type="checkbox"]').forEach(item => {
+        item.addEventListener("click",addClickListener);
+    });
+}
+
+function showPlayListForm(){
+    document.getElementById("create-playlist-btn").style.display="none";
+    document.querySelector(".playlist-form").style.display="block";
+}
+function addPlayList(){
+    let playListName = document.querySelector(".playlist-form input[type='text']").value;
+    let csrftoken = getCookie('csrftoken');
+    let data = {
+        "username":document.body.id,
+        "playListName":playListName
+    }
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken
+        },
+        mode: 'same-origin',
+        body: JSON.stringify(data)
+    }
+    fetch("/youtubeApp/create_new_playlist/",options)
+    .then(response => response.json())
+    .then(info => {
+        if(info.hasOwnProperty("existed")){
+            document.getElementById("playlist-error").style.display="block";
+        }
+        else{
+            document.getElementById("playlist-error").style.display="none";
+            document.querySelector(".playlist-form input[type='text']").value = "";
+            document.querySelector(".playlist-form").style.display = "none";
+            document.getElementById("create-playlist-btn").style.display = "block";
+            let modalBodyElement = document.querySelector("#myModal .modal-body");
+            let divElement = document.createElement("div");
+            divElement.setAttribute("class","checkbox");
+            let labelElement = document.createElement("label");
+            let inputElement = document.createElement("input");
+            inputElement.setAttribute("type","checkbox");
+            inputElement.setAttribute("value",info["playListId"]);
+            inputElement.addEventListener("click",addClickListener);
+            let textNode = document.createTextNode(playListName);
+            labelElement.appendChild(inputElement);
+            labelElement.appendChild(textNode);
+            divElement.appendChild(labelElement);
+            modalBodyElement.appendChild(divElement);
+        }
+    })
+    .catch(err => alert("Permission Denied"));
+}

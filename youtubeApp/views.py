@@ -1,3 +1,5 @@
+import re
+from django.http import request
 from django.shortcuts import redirect, render
 from youtubeApp.forms import SignUpForm,SignInForm, VideoUploadForm
 from youtubeApp.models import DisLike, Like, PlayList, User, Video
@@ -130,7 +132,7 @@ def get_playlists(request):
     data = json.loads(request.body)
     username = data["username"]
     video_id = int(data["videoId"])
-    playlists_objs = PlayList.objects.filter(user__username=username)
+    playlists_objs = PlayList.objects.filter(user__username=username).order_by("-modified_date")
     playlists = []
     for playlist_obj in playlists_objs:
         if(video_id in playlist_obj.video_ids):
@@ -174,3 +176,51 @@ def create_new_playlist(request):
     else:
         playlist = PlayList.objects.create(user=user,name=play_list_name)
         return JsonResponse({"success":True,"playListId":playlist.id})
+
+def playlists(request):
+    username = request.session.get('username',None)
+    if(username):
+        user = User.objects.get(username=username)
+    else:
+        user = None
+    playlists = PlayList.objects.filter(user__username=username).order_by("-modified_date")
+    return render(request,'playlists.html',{"user":user,"playlists":playlists})
+
+def get_videos_by_playlist(request):
+    data = json.loads(request.body)
+    playlist_id = data["playListId"]
+    playlist_obj = PlayList.objects.get(id=playlist_id)
+    if(len(playlist_obj.video_ids)>0):
+        video_urls,video_ids,video_user_names,video_names,uploaded_dates = [],[],[],[],[]
+        for id in playlist_obj.video_ids:
+            video = Video.objects.get(id=id)
+            video_urls.append(video.file.url)
+            video_ids.append(id)
+            video_user_names.append(video.user.username)
+            video_names.append(video.name)
+            uploaded_dates.append(video.uploaded_date.date())
+            result = {
+                "urls":video_urls,
+                "ids":video_ids,
+                "videoNames":video_names,
+                "userNames":video_user_names,
+                "uploadedDates":uploaded_dates
+            }
+    else:
+        result = {"nothing":True}
+    return JsonResponse(result)
+
+def remove_playlist(request):
+    data = json.loads(request.body)
+    playlist_id = data["playListId"]
+    PlayList.objects.filter(id=playlist_id).delete()
+    return JsonResponse({"deleted":True})
+
+def remove_video_from_playlist(request):
+    data = json.loads(request.body)
+    playlist_id = data["playListId"]
+    video_id = data["videoId"]
+    playlist_obj = PlayList.objects.get(id=playlist_id)
+    playlist_obj.video_ids.remove(int(video_id))
+    playlist_obj.save()
+    return JsonResponse({"deleted":True})

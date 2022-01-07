@@ -52,6 +52,7 @@ class DisLike(models.Model):
 class PlayList(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="playlists")
     name = models.CharField(max_length=60)
+    modified_date = models.DateTimeField(auto_now=True)
     video_ids = ArrayField(models.IntegerField(),default=list,blank=True)
     class Meta:
         constraints = [

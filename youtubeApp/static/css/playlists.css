@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+  }
+
+header {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    background-color: white;
+}
+.brand-logo img{
+    width: 100px;
+    height: 60px;
+}
+
+
+.search input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+}
+  
+  
+.search button {
+    float: left;
+    width: 15%;
+    padding: 10px;
+    background: #f1f1f1;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+}
+
+.search, .sign-in, .profile-section {
+    padding-top: 10px;
+}
+  
+/* Clear floats */
+    .search::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.sign-in button{
+    width: 100px;
+    height: 80%;
+    border: 1px solid blue;
+    background-color: transparent;
+    color: blue;
+    font-size: 15px;
+}
+.sign-in {
+    text-align: right;
+}
+.sign-in button:hover, #profile , .upload-video span{
+    cursor: pointer;
+}
+
+.upload-video {
+    margin-right: 20px;
+}
+
+.playlists-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+aside div{
+    padding: 10px;
+}
+
+.videos-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+
+aside > div > span:hover {
+    cursor: pointer;
+}
+
+video:hover {
+    cursor: pointer;
+}
+
+#empty-videos {
+    text-align: center;
+}
+
+#playlist-create-form {
+    width: 15%;
+    position: fixed;
+    bottom: 2px;
+    z-index:1;
+}
+
+.video > div > i:hover,
+.video > div > div:hover {
+    cursor: pointer;
+}

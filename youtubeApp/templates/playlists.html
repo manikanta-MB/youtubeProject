@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-{%load static%}
+{% load static %}
 <html>
     <head>
-        <title>Home Page</title>
+        <title>PlayLists</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="{% get_static_prefix %}css/home-styles.css">
+        <link rel="stylesheet" href="{% get_static_prefix %}css/playlists.css">
         <style>
             #user-options > div{
                 padding: 10px;
@@ -29,15 +29,35 @@
                 from { top: -100px;}
                 to { top: 0;}
             }
-            .videos-grid-container {
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-                grid-column-gap: 20px;
-                grid-row-gap: 20px;
+            aside {
+                background-color: #f1f1f1;
+                width: 15%;
+                position: fixed;
+                height: 70%;
+                overflow: auto;
+            }
+            aside > div {
+                position: relative;
+            }
+            aside > div > div {
+                width: 110px;
+                border-radius: 5px;
+                padding: 3px 5px;
+                position: absolute;
+                color: white;
+                background-color: black;
+                top: -2px;
+                left: 30px;
+                display: none;
+            }
+            aside > div > i:hover,
+            aside > div > div:hover
+            {
+                cursor: pointer;
             }
         </style>
     </head>
-    <body>
+    <body id="{{user}}">
         <div class="container">
             <header>
                 <div class="brand-logo">
@@ -72,16 +92,21 @@
                 </div>
             </header>
             <hr>
-            <div class="videos-grid-container">
-                {% for video in videos %}
-                    <div onclick="window.location = '/youtubeApp/play_video/{{video.id}}/'" class="video">
-                        <video style="width:100%;height:170px;" >
-                            <source src="{{video.file.url}}">
-                        </video><br>
-                        <b>{{video.name}} by {{video.user.username}}</b><br>
-                        Created: {{video.uploaded_date}}
+            <aside>
+                {% for playlist in playlists %}
+                    <div>
+                        <span id="{{playlist.id}}">{{playlist.name}}</span>
+                        <div>Remove playlist</div>
+                        <i style="float: right;" class="material-icons">more_vert</i>
                     </div>
                 {% endfor %}
+            </aside>
+            <div id="playlist-create-form">
+                <div id="playlist-error" style="color: red;display: none;">PlayList Already existed</div>
+                <input type="text" value="" class="form-control" placeholder="PlayList Name...">
+                <div onclick="addPlayList()" class="btn btn-primary">Create</div>
+            </div>
+            <div class="playlists-grid-container">
             </div>
         </div>
         <script>
@@ -89,6 +114,6 @@
                 window.location = "/youtubeApp/signin/"
             });
         </script>
-        <script src="{%get_static_prefix%}/js/home.js"></script>
+        <script src="{%get_static_prefix%}js/playlists.js"></script>
     </body>
 </html>

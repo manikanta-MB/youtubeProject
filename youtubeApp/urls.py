@@ -12,5 +12,10 @@ urlpatterns = [
     path('dislike/',views.dislike),
     path("add_to_playlist/",views.add_to_playlist),
     path('get_playlists/',views.get_playlists),
-    path('create_new_playlist/',views.create_new_playlist)
+    path('create_new_playlist/',views.create_new_playlist),
+    path('playlists/',views.playlists),
+    path('get_videos_by_playlist/',views.get_videos_by_playlist),
+    path('remove_playlist/',views.remove_playlist),
+    path('remove_video_from_playlist/',views.remove_video_from_playlist),
+    
 ]

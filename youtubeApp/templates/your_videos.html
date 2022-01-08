@@ -35,51 +35,43 @@
                 grid-column-gap: 20px;
                 grid-row-gap: 20px;
             }
+            .video {
+                cursor: default;
+            }
+            video,
+            .video > div > i,
+            .video > div > div {
+                cursor: pointer;
+            }
+            .video > div > div {
+                position: absolute;
+                top:0px;
+                right:20px;
+                color:white;
+                background-color:black;
+                z-index:1;
+                padding:2px 4px;
+                border-radius:5px;
+                display:none;
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <header>
-                <div class="brand-logo">
-                    <img src="{% get_static_prefix %}images/youtube_brand.jpg" alt="Youtube Brand Image">
-                </div>
-                <div class="search">
-                    <input type="text" placeholder="Search.." name="search">
-                    <button type="button"><i class="fa fa-search"></i></button>
-                </div>
-                {%if user%}
-                    <div class="profile-section">
-                        {%if user.profile%}
-                            <div style="float:right"><img id="profile" src="{{user.profile.url}}" alt="Profile Photo" class="img-circle" width="50" height="50"></div>
-                        {%else%}
-                        <div style="float: right;"><i id="profile" class="fa fa-user-circle-o" style="font-size:36px"></i></div>
-                        {%endif%}
-                        <div class="upload-video" style="float: right;"><span class="material-icons" style="font-size:36px">video_call</span></div>
-                    </div>
-                {%else%}
-                    <div class="sign-in">
-                        <button>
-                            <i class='far fa-user-circle' style='font-size:16px;'></i>
-                            SIGN IN
-                        </button>
-                    </div>
-                {%endif%}
-                <div id="user-options" style="display: none;">
-                    <div><a id="change-profile-link" href="#">Change Profile</a></div>
-                    <div><a href="/youtubeApp/your_videos/">Your Videos</a></div>
-                    <div><a href="/youtubeApp/playlists/">PlayLists</a></div>
-                    <div><a href="/youtubeApp/logout/">Logout</a></div>
-                </div>
-            </header>
+            {% include 'header.html' %}
             <hr>
             <div class="videos-grid-container">
                 {% for video in videos %}
-                    <div onclick="window.location = '/youtubeApp/play_video/{{video.id}}/'" class="video">
-                        <video style="width:100%;height:170px;" >
+                    <div class="video">
+                        <video id="{{video.id}}" style="width:100%;height:170px;" >
                             <source src="{{video.file.url}}">
                         </video><br>
-                        <b>{{video.name}} by {{video.user.username}}</b><br>
-                        Created: {{video.uploaded_date}}
+                        <div style="position: relative;">
+                            <div>Remove</div>
+                            <i class="material-icons" style="float: right;">more_vert</i>
+                            <b>{{video.name}}</b><br>
+                            Created: {{video.uploaded_date}}
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -97,5 +89,6 @@
         </script>
         <script src="{%get_static_prefix%}/js/home.js"></script>
         <script src="{%get_static_prefix%}/js/change-profile.js"></script>
+        <script src="{%get_static_prefix%}/js/your_videos.js"></script>
     </body>
 </html>

@@ -236,3 +236,18 @@ def remove_video_from_playlist(request):
     playlist_obj.video_ids.remove(int(video_id))
     playlist_obj.save()
     return JsonResponse({"deleted":True})
+
+def your_videos(request):
+    username = request.session.get('username',None)
+    if(username):
+        user = User.objects.get(username=username)
+    else:
+        user = None
+    videos = Video.objects.filter(user__username=username)
+    return render(request,'your_videos.html',{"user":user,"videos":videos})
+
+def delete_video(request):
+    data = json.loads(request.body)
+    video_id = data["videoId"]
+    Video.objects.filter(id=video_id).delete()
+    return JsonResponse({"deleted":True})

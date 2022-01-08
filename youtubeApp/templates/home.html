@@ -65,7 +65,7 @@
                     </div>
                 {%endif%}
                 <div id="user-options" style="display: none;">
-                    <div><a href="#">Change Profile</a></div>
+                    <div><a id="change-profile-link" href="#">Change Profile</a></div>
                     <div><a href="#">Your Videos</a></div>
                     <div><a href="/youtubeApp/playlists/">PlayLists</a></div>
                     <div><a href="/youtubeApp/logout/">Logout</a></div>
@@ -84,11 +84,18 @@
                 {% endfor %}
             </div>
         </div>
+        <form action="/youtubeApp/profile_change/" method="post" id="profile-change-form" enctype="multipart/form-data" hidden>
+            {% csrf_token %}
+            {{ profile_change_form }}
+            <input type="text" name = "username" value="{{user}}">
+            <input type="submit" value="Upload" >
+        </form>
         <script>
             document.querySelector('.sign-in > button').addEventListener("click",function(){
                 window.location = "/youtubeApp/signin/"
             });
         </script>
         <script src="{%get_static_prefix%}/js/home.js"></script>
+        <script src="{%get_static_prefix%}/js/change-profile.js"></script>
     </body>
 </html>

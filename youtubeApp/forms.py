@@ -23,3 +23,6 @@ class VideoUploadForm(forms.ModelForm):
     class Meta:
         model = Video
         fields = ("name","description","file")
+
+class ProfileChangeForm(forms.Form):
+    profile = forms.FileField(widget = forms.FileInput(attrs={'accept':'.jpg,.jpeg,.png'}))

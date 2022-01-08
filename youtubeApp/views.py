@@ -1,7 +1,7 @@
 import re
 from django.http import request
 from django.shortcuts import redirect, render
-from youtubeApp.forms import SignUpForm,SignInForm, VideoUploadForm
+from youtubeApp.forms import ProfileChangeForm, SignUpForm,SignInForm, VideoUploadForm
 from youtubeApp.models import DisLike, Like, PlayList, User, Video
 from django.contrib.auth.hashers import make_password,check_password
 from django.views.decorators.cache import cache_control
@@ -24,7 +24,13 @@ def home_page(request):
     else:
         user = None
     videos = Video.objects.all()
-    return render(request,'home.html',{"user":user,"videos":videos})
+    profile_change_form = ProfileChangeForm()
+    context = {
+        "user":user,
+        "videos":videos,
+        "profile_change_form":profile_change_form
+    }
+    return render(request,'home.html',context)
 
 def signup(request):
     if(request.method == "POST"):
@@ -61,10 +67,16 @@ def logout(request):
     request.session.pop("username",None)
     return redirect("/youtubeApp/")
 
+def profile_change(request):
+    if(request.method == "POST"):
+        username = request.POST["username"]
+        user = User.objects.get(username = username)
+        user.profile = request.FILES["profile"]
+        user.save()
+        return JsonResponse({"changed":True,"url":user.profile.url})
+
 def upload_video(request):
     if(request.method == "POST"):
-        # file_name = request.FILES["file"]
-        # form = VideoUploadForm(request.POST,request.FILES)
         form = VideoUploadForm(request.POST,request.FILES)
         if(form.is_valid()):
             video = form.save(commit=False)

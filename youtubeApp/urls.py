@@ -17,5 +17,6 @@ urlpatterns = [
     path('get_videos_by_playlist/',views.get_videos_by_playlist),
     path('remove_playlist/',views.remove_playlist),
     path('remove_video_from_playlist/',views.remove_video_from_playlist),
+    path('profile_change/',views.profile_change),
     
 ]

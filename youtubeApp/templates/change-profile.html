@@ -1,0 +1,7 @@
+{% load static %}
+<form action="/youtubeApp/profile_change/" method="post" id="profile-change-form" enctype="multipart/form-data" hidden>
+    {% csrf_token %}
+    {{ profile_change_form }}
+    <input type="text" name = "username" value="{{user}}">
+    <input type="submit" value="Upload" >
+</form>

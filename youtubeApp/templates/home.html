@@ -12,6 +12,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="{% get_static_prefix %}css/home-styles.css">
         <style>
+            .brand-logo img:hover {
+                cursor: pointer;
+            }
             #user-options > div{
                 padding: 10px;
             }
@@ -39,38 +42,7 @@
     </head>
     <body>
         <div class="container">
-            <header>
-                <div class="brand-logo">
-                    <img src="{% get_static_prefix %}images/youtube_brand.jpg" alt="Youtube Brand Image">
-                </div>
-                <div class="search">
-                    <input type="text" placeholder="Search.." name="search">
-                    <button type="button"><i class="fa fa-search"></i></button>
-                </div>
-                {%if user%}
-                    <div class="profile-section">
-                        {%if user.profile%}
-                            <div style="float:right"><img id="profile" src="{{user.profile.url}}" alt="Profile Photo" class="img-circle" width="50" height="50"></div>
-                        {%else%}
-                        <div style="float: right;"><i id="profile" class="fa fa-user-circle-o" style="font-size:36px"></i></div>
-                        {%endif%}
-                        <div class="upload-video" style="float: right;"><span class="material-icons" style="font-size:36px">video_call</span></div>
-                    </div>
-                {%else%}
-                    <div class="sign-in">
-                        <button>
-                            <i class='far fa-user-circle' style='font-size:16px;'></i>
-                            SIGN IN
-                        </button>
-                    </div>
-                {%endif%}
-                <div id="user-options" style="display: none;">
-                    <div><a id="change-profile-link" href="#">Change Profile</a></div>
-                    <div><a href="/youtubeApp/your_videos/">Your Videos</a></div>
-                    <div><a href="/youtubeApp/playlists/">PlayLists</a></div>
-                    <div><a href="/youtubeApp/logout/">Logout</a></div>
-                </div>
-            </header>
+            {% include 'header.html' %}
             <hr>
             <div class="videos-grid-container">
                 {% for video in videos %}
@@ -84,12 +56,7 @@
                 {% endfor %}
             </div>
         </div>
-        <form action="/youtubeApp/profile_change/" method="post" id="profile-change-form" enctype="multipart/form-data" hidden>
-            {% csrf_token %}
-            {{ profile_change_form }}
-            <input type="text" name = "username" value="{{user}}">
-            <input type="submit" value="Upload" >
-        </form>
+        {% include 'change-profile.html' %}
         <script>
             document.querySelector('.sign-in > button').addEventListener("click",function(){
                 window.location = "/youtubeApp/signin/"

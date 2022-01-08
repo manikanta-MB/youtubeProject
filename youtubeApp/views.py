@@ -99,14 +99,14 @@ def play_video(request,id):
         user = None
     is_like_existed = Like.objects.filter(video=video_to_watch,by_whom=user).exists()
     is_dislike_existed = DisLike.objects.filter(video=video_to_watch,by_whom=user).exists()
-    # playlists = PlayList.objects.filter(user=user)
+    profile_change_form = ProfileChangeForm()
     context = {
         "user":user,
         "remaining_videos":remaining_videos,
         "video_to_watch":video_to_watch,
         "is_like_existed":is_like_existed,
         "is_dislike_existed":is_dislike_existed,
-        # "playlists":playlists
+        "profile_change_form":profile_change_form
     }
     return render(request,"play-video.html",context)
 
@@ -196,7 +196,13 @@ def playlists(request):
     else:
         user = None
     playlists = PlayList.objects.filter(user__username=username).order_by("-modified_date")
-    return render(request,'playlists.html',{"user":user,"playlists":playlists})
+    profile_change_form = ProfileChangeForm()
+    context = {
+        "profile_change_form":profile_change_form,
+        "playlists":playlists,
+        "user":user
+    }
+    return render(request,'playlists.html',context)
 
 def get_videos_by_playlist(request):
     data = json.loads(request.body)
@@ -244,7 +250,13 @@ def your_videos(request):
     else:
         user = None
     videos = Video.objects.filter(user__username=username)
-    return render(request,'your_videos.html',{"user":user,"videos":videos})
+    profile_change_form = ProfileChangeForm()
+    context = {
+        "user":user,
+        "videos":videos,
+        "profile_change_form":profile_change_form
+    }
+    return render(request,'your_videos.html',context)
 
 def delete_video(request):
     data = json.loads(request.body)

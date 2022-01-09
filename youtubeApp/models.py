@@ -7,7 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 
 
 def get_profile_path(instance,filename):
-    return "images/profiles/"+instance.username+".jpg"
+    return "images/"+instance.username+".jpg"
 
 class User(models.Model):
     username = models.CharField(primary_key=True,max_length=20)
@@ -21,7 +21,7 @@ class User(models.Model):
         return self.username
 
 def video_upload_path(instance,filename):
-    return "videos/{}/{}".format(instance.user.username,filename)
+    return "videos/{}".format(filename)
 
 class Video(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='videos')

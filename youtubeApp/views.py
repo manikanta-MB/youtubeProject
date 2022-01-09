@@ -16,7 +16,7 @@ import json
 #         pass
 #     return inner
 
-# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def home_page(request):
     username = request.session.get('username',None)
     if(username):
@@ -75,6 +75,7 @@ def profile_change(request):
         user.save()
         return JsonResponse({"changed":True,"url":user.profile.url})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def upload_video(request):
     if(request.method == "POST"):
         form = VideoUploadForm(request.POST,request.FILES)
@@ -89,6 +90,7 @@ def upload_video(request):
         form = VideoUploadForm()
     return render(request,"upload-video.html",{"form":form})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def play_video(request,id):
     remaining_videos = Video.objects.exclude(id=id)
     video_to_watch = Video.objects.get(id=id)
@@ -189,6 +191,7 @@ def create_new_playlist(request):
         playlist = PlayList.objects.create(user=user,name=play_list_name)
         return JsonResponse({"success":True,"playListId":playlist.id})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def playlists(request):
     username = request.session.get('username',None)
     if(username):
@@ -243,6 +246,7 @@ def remove_video_from_playlist(request):
     playlist_obj.save()
     return JsonResponse({"deleted":True})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def your_videos(request):
     username = request.session.get('username',None)
     if(username):
